@@ -1,0 +1,11 @@
+<a class="lang-btn">
+    {{ $.Site.Language.LanguageName }}
+</a>
+
+{{ range $index, $element := .Translations }}
+    /
+
+    <a href="{{ .Permalink }}" class="lang-btn">
+        {{ .Language.LanguageName }}
+    </a>
+{{ end }}

@@ -1,0 +1,17 @@
+name = "Dark Theme Editor"
+license = "Apache-2.0"
+licenselink = "https://github.com/JingWangTW/dark-theme-editor/blob/main/LICENSE"
+demosite = "https://jingwangtw.github.io/dark-theme-editor/"
+description = "A simple, editor-like theme for Hugo."
+homepage = "https://github.com/JingWangTW/dark-theme-editor"
+tags = ["multilingual", "dark", "responsive", "technical", "editor", "Docs"]
+features = ["multilingual", "syntax highlighting", "responsive"]
+
+[author]
+    name = "Jing Wang"
+    homepage = "https://github.com/JingWangTW"
+
+[origin]
+    name = "edidor"
+    homepage = "https://github.com/sfengyuan/edidor"
+    repo = "https://github.com/sfengyuan/edidor"

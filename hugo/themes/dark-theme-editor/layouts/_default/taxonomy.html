@@ -1,0 +1,44 @@
+{{ define "main_article" }}
+    <article class="main">
+        {{ partial "module/sidebar_btn" . }}
+
+
+        <div class="title">
+            <h1 class="title-header">
+                {{ if eq .Data.Singular "tag" }}
+                    <i class="bi bi-tags"></i>
+                {{ else if eq .Data.Singular "category" }}
+                    <i class="bi bi-bookmarks"></i>
+                {{ else if eq .Data.Singular "autor" }}
+                    <i class="bi bi-person-fill"></i>
+                {{ else }}
+                    <i class="bi bi-gear"></i>
+                {{ end }}
+
+                {{ i18n ( lower .Title | singularize) 1 }}
+            </h1>
+        </div>
+
+        <div class="article-meta">
+            <div class="breadcumb">
+                <i class="bi bi-folder"></i>
+                {{ partial "module/breadcrumb" . }}
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="list-terms">
+            <ul>
+                {{ range .Pages }}
+                    <li>
+                        <a href="{{ .Permalink }}">
+                            {{ partial "module/term_icon" . }}
+                            {{ .Title }}
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </article>
+{{ end }}

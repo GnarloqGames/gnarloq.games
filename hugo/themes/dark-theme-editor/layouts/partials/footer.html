@@ -1,0 +1,117 @@
+<footer class="footer">
+    <div class="footer-left">
+        <ul class="social">
+            {{ with $.Site.Params.footer.copyrightStr }}
+                <li>{{ . }}</li>
+            {{ end }}
+
+            {{ with $.Site.Params.globalFrontmatter.author }}
+                <li>{{ . }}</li>
+            {{ end }}
+
+            {{ range $key, $val := $.Site.Params.footer.socialLink }}
+                {{ with $val }}
+                    <li>
+                        {{ if eq $key "email" }}
+                            <a href="mailto:{{ $val }}" target="_blank">
+                                <i class="bi-envelope"></i>
+                            </a>
+                        {{ else }}
+                            <a href="{{ $val }}" target="_blank">
+                                <i class="bi-{{ $key }}"></i>
+                            </a>
+                        {{ end }}
+
+                    </li>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+
+    <div class="footer-right">
+        <ul class="control status clearfix">
+            {{ with $.Site.Params.footer.counter }}
+                <li>
+                    {{ if $.IsPage }}
+                        Word Count:
+                        {{ $.WordCount }}
+                    {{ else if $.IsSection }}
+                        Pages In Section:
+                        {{ len (where $.Pages "Params.hidden" "!=" true) }}
+                    {{ else if $.IsHome }}
+                        Pages:
+                        {{ len (where $.Site.RegularPages "Params.hidden" "!=" true) }}
+                    {{ else if $.IsNode }}
+                        Pages:
+                        {{ len (where $.Pages "Params.hidden" "!=" true) }}
+                    {{ end }}
+                </li>
+            {{ end }}
+
+            {{/* Use this as a trick to check if the multilingual mode is enabled. */}}
+            {{ if $.Site.IsMultiLingual }}
+                <li class="language-selector">
+                    <i class="bi bi-translate"></i>
+
+                    <ul class="language-selector-menu">
+                        {{ range $.Site.Home.AllTranslations }}
+                            <li>
+                                <a href="{{ .Permalink }}">
+                                    {{ .Lang }}
+                                    -{{ .Language.LanguageName }}
+                                </a>
+                            </li>
+                        {{ end }}
+                    </ul>
+                </li>
+            {{ end }}
+
+            {{ with $.Site.Params.footer.language }}
+                <li>{{ $.Site.Language.Lang }}</li>
+            {{ end }}
+
+            {{ with $.Site.Params.footer.hugoVersion }}
+                <li>
+                    <a href="https://gohugo.io" class="btn" target="_blank"
+                        >Hugo: {{ hugo.Version }}</a
+                    >
+                </li>
+            {{ end }}
+
+            {{ with $.Site.Params.footer.theme }}
+                <li>
+                    <a
+                        href="https://github.com/JingWangTW/dark-theme-editor"
+                        class="btn"
+                        target="_blank"
+                        >Theme: dark-theme-editor</a
+                    >
+                </li>
+            {{ end }}
+
+            {{ with $.Site.Params.footer.modifiedTime }}
+                <li>
+                    {{ if or ($.IsHome) ($.IsNode) }}
+                        {{ with hugo.BuildDate }}
+                            Last build: &nbsp;
+                            <time>
+                                {{ time hugo.BuildDate | time.Format $.Site.Params.footer.dateFormat | safeHTML }}
+                            </time>
+                        {{ end }}
+                    {{ else }}
+                        Last modified: &nbsp;
+                        <time>
+                            {{ time $.Lastmod | time.Format $.Site.Params.footer.dateFormat | safeHTML }}
+                        </time>
+                    {{ end }}
+                </li>
+            {{ end }}
+
+            {{ with $.Site.Params.footer.gitHash }}
+                <li title="{{ $.GitInfo.Subject }}">
+                    {{ $.GitInfo.AbbreviatedHash }}
+                </li>
+            {{ end }}
+        </ul>
+    </div>
+</footer>

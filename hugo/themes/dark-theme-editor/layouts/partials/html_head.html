@@ -1,0 +1,172 @@
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {{ hugo.Generator }}
+
+    {{ with $.Site.Params.site.googleVerification }}
+        <meta name="google-site-verification" content="{{ . }}" />
+    {{ end }}
+
+    {{ with $.Site.Params.site.bingVerifivation }}
+        <meta name="msvalidate.01" content="{{ . }}" />
+    {{ end }}
+
+    {{ if $.IsPage }}
+        {{ if isset $.Params "description" }}
+            <meta name="description" content="{{ $.Params.description }}" />
+        {{ else if isset $.Site.Params.globalFrontmatter "description" }}
+            <meta
+                name="description"
+                content="{{ $.Site.Params.globalFrontmatter.description }}" />
+        {{ end }}
+
+        {{ if isset $.Params "keywords" }}
+            <meta name="keywords" content="{{ $.Params.keywords }}" />
+        {{ else if isset $.Site.Params.globalFrontmatter "keywords" }}
+            <meta
+                name="keywords"
+                content="{{ $.Site.Params.globalFrontmatter.keywords }}" />
+        {{ end }}
+
+        {{ if isset $.Params "author" }}
+            <meta name="author" content="{{ $.Params.author }}" />
+        {{ else if isset $.Site.Params.globalFrontmatter "author" }}
+            <meta
+                name="author"
+                content="{{ $.Site.Params.globalFrontmatter.author }}" />
+        {{ end }}
+
+    {{ else }}
+        {{ with $.Site.Params.globalFrontmatter.description }}
+            <meta name="description" content="{{ . }}" />
+        {{ end }}
+
+        {{ with $.Site.Params.globalFrontmatter.author }}
+            <meta name="author" content="{{ . }}" />
+        {{ end }}
+
+    {{ end }}
+
+
+    <title>
+        {{ if .IsHome }}
+            {{ $.Site.Params.header.title }}
+        {{ else }}
+            {{ $.Page.Title }} |
+            {{ $.Site.Params.header.title }}
+        {{ end }}
+    </title>
+
+    {{ with $.Site.Params.site.faviconUrl }}
+        <link rel="icon" href="{{ . }}" />
+    {{ end }}
+
+
+    <!-- Bundle all CSS -->
+    {{ $style := slice }}
+
+    {{/* Record all the css file names, except the general files. */}}
+    {{ $style_files_list := slice }}
+
+
+    <!-- Get all remore CSS -->
+    {{ $style = $style | append ( resources.GetRemote "https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" ) }}
+
+
+    <!-- Get all local CSS -->
+    {{ $style = $style | append ( resources.Match "_theme/css/*.css" ) }}
+
+
+    <!-- Append all custom CSS listed in the page metadata. -->
+    {{ if isset $.Params "localcss" }}
+        {{ range $css_src :=  $.Params.localcss }}
+            {{ $style = $style | append ( resources.Match $css_src ) }}
+            {{ $style_files_list =  $style_files_list | append $css_src }}
+        {{ end }}
+    {{ end }}
+
+    {{ if isset $.Params "externalcssdownload" }}
+        {{ range $css_src :=  $.Params.externalcssdownload }}
+            {{ $style = $style | append ( resources.GetRemote $css_src  ) }}
+            {{ $style_files_list =  $style_files_list | append $css_src }}
+        {{ end }}
+    {{ end }}
+
+
+    <!-- Append all custom CSS listed in the global config.-->
+    {{ with $.Site.Params.globalFrontmatter.localCss }}
+        {{ range $css_src :=  $.Site.Params.globalFrontmatter.localCss }}
+            {{ $style = $style | append ( resources.Match $css_src  ) }}
+            {{ $style_files_list =  $style_files_list | append $css_src }}
+        {{ end }}
+    {{ end }}
+
+    {{ with $.Site.Params.globalFrontmatter.externalCssDownload }}
+        {{ range $css_src :=  $.Site.Params.globalFrontmatter.externalCssDownload }}
+            {{ $style = $style | append ( resources.GetRemote $css_src  ) }}
+            {{ $style_files_list =  $style_files_list | append $css_src }}
+        {{ end }}
+    {{ end }}
+
+    {{ if hugo.IsProduction }}
+
+        {{/* Create a hash based on the file list, to determince different style file */}}
+        {{ $hash:= substr (jsonify $style_files_list | md5) 0 7 }}
+
+
+        <!-- Concat to a single file -->
+        {{ $style = $style | resources.Concat ( printf "css/index_%s.css" $hash ) | minify | resources.Fingerprint "sha512" }}
+
+
+        <link
+            rel="stylesheet"
+            href="{{ $style.RelPermalink }}"
+            integrity="{{ $style.Data.Integrity }}" />
+    {{ else }}
+
+        {{ range $style }}
+            {{ $currentStyle := . | resources.Fingerprint "sha512" }}
+            <link
+                rel="stylesheet"
+                href="{{ $currentStyle.RelPermalink }}"
+                integrity="{{ $currentStyle.Data.Integrity }}" />
+        {{ end }}
+
+    {{ end }}
+
+
+    <!-- External CSS that needs to be included separately. -->
+    {{ $style_seprated := slice }}
+
+    {{ if isset $.Params "externalcss" }}
+        {{ range $css_src :=  $.Params.externalcss }}
+            {{ $style_seprated = $style_seprated | append ($css_src ) }}
+        {{ end }}
+    {{ end }}
+
+    {{ with $.Site.Params.globalFrontmatter.externalCss }}
+        {{ range $css_src :=  $.Site.Params.globalFrontmatter.externalCss }}
+            {{ $style_seprated = $style_seprated | append ( $css_src ) }}
+        {{ end }}
+    {{ end }}
+
+    {{ range $style_seprated }}
+        <link rel="stylesheet" href="{{ . }}" />
+    {{ end }}
+
+    {{ if isset $.Params "usemath" }}
+
+        {{ if $.Params.usemath }}
+            {{ partial "module/show_math" . }}
+        {{ end }}
+
+    {{ else if isset $.Site.Params.globalFrontmatter "useMath" }}
+
+        {{ if $.Site.Params.globalFrontmatter.useMath }}
+            {{ partial "module/show_math" . }}
+        {{ end }}
+
+    {{ end }}
+</head>

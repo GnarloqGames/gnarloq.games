@@ -1,0 +1,38 @@
+{{ define "main_article" }}
+    <article class="main">
+        {{ partial "module/sidebar_btn" . }}
+
+
+        <div class="title">
+            <h1 class="title-header">
+                {{ partial "module/term_icon" . }}
+
+                {{ i18n "all_about" | title }}
+                <em>
+                    {{ .Title | singularize }}
+                </em>
+            </h1>
+        </div>
+
+        <div class="article-meta">
+            <div class="breadcumb">
+                <i class="bi bi-folder"></i>
+                {{ partial "module/breadcrumb" . }}
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="list-files">
+            <ul class="section-tree">
+                {{ range .Pages }}
+                    <li class="file">
+                        <a href="{{ .Permalink }}">
+                            {{ .Title }}
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </article>
+{{ end }}

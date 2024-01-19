@@ -1,0 +1,65 @@
+{{ define "main_article" }}
+    <article class="main">
+        {{ partial "module/sidebar_btn" . }}
+
+
+        <div class="home">
+            <div class="title">
+                <h1 class="title-caption">{{ $.Site.Params.header.title }}</h1>
+
+                {{ with $.Site.Params.header.subtitle }}
+                    <h2 class="subtitle">
+                        {{ . }}
+                    </h2>
+                {{ end }}
+            </div>
+            <div class="recommend">
+                <div class="left">
+                    <div class="start">
+                        {{ with $.Site.Params.homePage.siteLongDescription }}
+                            <h3 class="recommend-title">
+                                {{ $.Site.Params.homePage.siteLongDescriptionTitle | default "Start" }}
+                            </h3>
+                            <p class="long-description">
+                                {{ . }}
+                            </p>
+                        {{ end }}
+                    </div>
+                    <div class="recent">
+                        {{ with $.Site.Params.homePage.showRecentPostsBlock }}
+                            <h3 class="recommend-title">
+                                {{ i18n "recent_posts" | title }}
+                            </h3>
+                            <ul class="recent-posts-list">
+                                {{ range ( $.Site.RegularPages | first ($.Site.Params.homePage.numOfRecentPosts | default 5) ) }}
+                                    {{ $page := . }}
+                                    <li>
+                                        <a
+                                            href="{{ .Permalink }}"
+                                            title=".{{ .RelPermalink }}"
+                                            >{{ $page.Title }}</a
+                                        >
+                                        {{ with $.Site.Params.homePage.recentPostShowUrl }}
+                                            <span
+                                                class="recent-posts-items-path"
+                                                title=".{{ $page.RelPermalink }}">
+                                                .
+                                                {{ $page.RelPermalink }}
+                                            </span>
+                                        {{ end }}
+                                    </li>
+                                {{ end }}
+                            </ul>
+                        {{ end }}
+                    </div>
+                </div>
+                <div class="right">
+                    <h3 class="recommend-title">
+                        {{ i18n "walkthroughs"  | title }}
+                    </h3>
+                    {{ partial "module/section_tree" ( dict "context" . "currentPage" . ) }}
+                </div>
+            </div>
+        </div>
+    </article>
+{{ end }}

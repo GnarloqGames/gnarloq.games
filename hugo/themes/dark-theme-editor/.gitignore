@@ -1,0 +1,17 @@
+# node modules and config files are ignored
+/node_modules
+
+# node dependency version is not required to this project
+package-lock.json
+
+# ignore hugo generated
+/public/**
+/resources/**
+.hugo_build.lock
+
+# ignore vscode configuration
+/.vscode
+
+# this is a theme, we don't need these files
+/content
+/themes
