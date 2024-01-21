@@ -30,4 +30,4 @@ jobs:
             run: |
               docker build . --tag ghcr.io/gnarloqgames/site:${SHORT_SHA}
               docker tag ghcr.io/gnarloqgames/site:${SHORT_SHA} ghcr.io/gnarloqgames/site:latest
-              docker push --all ghcr.io/gnarloqgames/site
+              docker push -a ghcr.io/gnarloqgames/site
