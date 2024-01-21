@@ -28,6 +28,6 @@ jobs:
 
           - name: 'Build and Push Image'
             run: |
-              docker build . --tag ghcr.io/GnarloqGames/site:${SHORT_SHA}
-              docker tag ghcr.io/GnarloqGames/site:${SHORT_SHA} ghcr.io/GnarloqGames/site:latest
-              docker push --all ghcr.io/GnarloqGames/site
+              docker build . --tag ghcr.io/gnarloqgames/site:${SHORT_SHA}
+              docker tag ghcr.io/gnarloqgames/site:${SHORT_SHA} ghcr.io/gnarloqgames/site:latest
+              docker push --all ghcr.io/gnarloqgames/site
