@@ -1,0 +1,10 @@
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-letsencrypt-prod
+  hosts:
+    - host: gnarloq.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
