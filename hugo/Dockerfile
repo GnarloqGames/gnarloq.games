@@ -11,9 +11,9 @@ RUN hugo
 
 FROM caddy:2.7
 
-LABEL org.opencontainers.image.source = "https://github.com/GnarloqGames/gnarloq.games.git"
-LABEL org.opencontainers.image.description = "Image for serving https://gnarloq.games"
-LABEL org.opencontainers.image.license = "MIT"
+LABEL org.opencontainers.image.source "https://github.com/GnarloqGames/gnarloq.games.git"
+LABEL org.opencontainers.image.description "Image for serving https://gnarloq.games"
+LABEL org.opencontainers.image.license "MIT"
 
 COPY --from=build /build/public /usr/share/gnarloq
 RUN printf ":80\nroot * /usr/share/gnarloq\nfile_server\n" > /config/caddy/Caddyfile
