@@ -28,8 +28,18 @@ jobs:
               username: ${{github.actor}}
               password: ${{secrets.GITHUB_TOKEN}}
 
+          - name: 'Login to GnarloqGames private registry'
+            uses: docker/login-action@v1
+            with:
+              registry: registry.0x42.in
+              username: robot$gnarloq
+              password: ${{secrets.REGISTRY_PWD}}
+
           - name: 'Build and Push Image'
             run: |
               docker build . --tag ghcr.io/gnarloqgames/site:${SHORT_SHA}
               docker tag ghcr.io/gnarloqgames/site:${SHORT_SHA} ghcr.io/gnarloqgames/site:latest
+              docker tag ghcr.io/gnarloqgames/site:${SHORT_SHA} registry.0x42.in/library/docker/gnarloqgames/site:${SHORT_SHA}
+              docker tag ghcr.io/gnarloqgames/site:${SHORT_SHA} registry.0x42.in/library/docker/gnarloqgames/site:latest
               docker push -a ghcr.io/gnarloqgames/site
+              docker push -a registry.0x42.in/library/docker/gnarloqgames/site
